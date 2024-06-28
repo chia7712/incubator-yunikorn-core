@@ -751,6 +751,11 @@ func (cc *ClusterContext) processAllocations(request *si.AllocationRequest) {
 		}
 
 		alloc := objects.NewAllocationFromSI(siAlloc)
+		if alloc == nil {
+			println("[CHIA] NewAllocationFromSI: " + alloc.GetAllocationKey())
+		} else {
+			println("[CHIA] NewAllocationFromSI: nil")
+		}
 		if err := partition.addAllocation(alloc); err != nil {
 			rejectedAllocs = append(rejectedAllocs, &si.RejectedAllocation{
 				AllocationKey: siAlloc.AllocationKey,

@@ -1516,6 +1516,7 @@ func (sa *Application) tryNode(node *Node, ask *AllocationAsk) *AllocationResult
 		}
 		// all is OK, last update for the app
 		result := newAllocatedAllocationResult(node.NodeID, ask, alloc)
+		println("[CHIA] tryNode " + alloc.GetAllocationKey())
 		sa.addAllocationInternal(result.ResultType, alloc)
 		return result
 	}
@@ -1619,6 +1620,7 @@ func (sa *Application) getAllRequestsInternal() []*AllocationAsk {
 func (sa *Application) AddAllocation(alloc *Allocation) {
 	sa.Lock()
 	defer sa.Unlock()
+	println("[CHIA] AddAllocation " + alloc.GetAllocationKey())
 	sa.addAllocationInternal(Allocated, alloc)
 }
 
@@ -1668,6 +1670,7 @@ func (sa *Application) addAllocationInternal(allocType AllocationResultType, all
 		sa.maxAllocatedResource = resources.ComponentWiseMax(sa.allocatedResource, sa.maxAllocatedResource)
 	}
 	sa.appEvents.sendNewAllocationEvent(alloc)
+	println("[CHIA] addAllocationInternal " + alloc.GetAllocationKey())
 	sa.allocations[alloc.GetAllocationKey()] = alloc
 }
 
@@ -1735,6 +1738,7 @@ func (sa *Application) ReplaceAllocation(allocationKey string) *Allocation {
 	alloc.SetPlaceholderUsed(true)
 	alloc.SetPlaceholderCreateTime(ph.GetCreateTime())
 	alloc.SetBindTime(time.Now())
+	println("[CHIA] ReplaceAllocation " + alloc.GetAllocationKey())
 	sa.addAllocationInternal(Replaced, alloc)
 	// order is important: clean up the allocation after adding it to the app
 	// we need the original Replaced allocation resultType.
